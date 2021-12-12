@@ -9,15 +9,21 @@ class Produto extends RestController{
     public function __construct(){
         parent::__construct();
         $this->load->model('ProdutoModel');
-        //$this->load->model('GrupoModel');
-        //$this->load->model('FornecedorModel');
-        //$this->load->model('FabricanteModel');
+        $this->load->model('GrupoModel');
+        $this->load->model('FornecedorModel');
+        $this->load->model('FabricanteModel');
     }
 
     public function index_get($id=NULL){
         if ($id==NULL){
             $resultado = $this->ProdutoModel->recuperarTodos();
             return $this->response($resultado, RestController::HTTP_OK);
+            foreach ($resultado as $r){
+                $r->grupo = $this->GrupoModel->recuperarPorId($r->codgrupo);
+                $r->fabricante = $this->FabricanteModel->recuperarPorId($r->codfabricante);
+                unset($r->codgrupo);
+                unset($r->codfabricante);
+            }
         }else{
             $resultado = $this->ProdutoModel->recuperarPorId($id);
             if (count($resultado)==0){
@@ -44,11 +50,23 @@ class Produto extends RestController{
     }
 
     public function index_put($id){
-
+        $produto = $this->input->put("produto");
+        $preco = $this->input->put("preco");
+        $qtd = $this->input->put("qtd");
+        $codfabricante = $this->input->put("codfabricante");
+        $codgrupo = $this->input->put("codgrupo");
+        
+        $this->ProdutoModel->atualizar($id, $produto, $preco, $qtd, $codfabricante, $codgrupo);
+        $resultado["status"]=true;
+        $resultado["messagem"]="Dados atualizados com sucesso";
+        $this->response($resultado, RestController::HTTP_OK);
     }
 
     public function index_delete($id){
-
+        $this->ProdutoModel->excluir($id);
+        $resultado["status"]=true;
+        $resultado["mensagem"]="Dados excluídos com sucesso";
+        $this->response($resultado, RestController::HTTP_OK);
     }
 
     
