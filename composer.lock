@@ -22,7 +22,7 @@
                 "shasum": ""
             },
             "require": {
-                "php": "^7.1 || ^8.0"
+                "php": "7.4.26"
             },
             "require-dev": {
                 "doctrine/coding-standard": "^8.0",
@@ -1590,7 +1590,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.3.7",
+        "php": "7.4.26",
         "ext-ftp": "*"
     },
     "platform-dev": [],
